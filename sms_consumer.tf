@@ -157,7 +157,6 @@ resource "aws_launch_template" "sms_consumer" {
       postgres_host                     = var.postgres_host
       postgres_port                     = var.postgres_port
       postgres_db                       = var.postgres_db
-      postgres_sync_db                  = var.postgres_sync_db
       mongo_username                    = var.mongo_username
       mongo_password                    = var.mongo_password
       mongo_host                        = var.mongo_host

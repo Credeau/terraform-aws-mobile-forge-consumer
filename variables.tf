@@ -385,12 +385,6 @@ variable "postgres_db" {
   default     = null
 }
 
-variable "postgres_sync_db" {
-  type        = string
-  description = "postgres sync database"
-  default     = null
-}
-
 variable "mongo_username" {
   type        = string
   description = "mongo username"
