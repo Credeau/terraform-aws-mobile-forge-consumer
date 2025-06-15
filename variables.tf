@@ -162,6 +162,19 @@ variable "downscale_schedule" {
   default     = "0 21 * * MON-SUN"
 }
 
+variable "all_topic_partition_count" {
+  type        = map(number)
+  description = "number of partitions for all topics"
+  default     = {
+    "sms_batched"             = 20
+    "apps_and_device_batched" = 10
+    "contacts_batched"        = 5
+    "call_logs_batched"       = 5
+    "events_log"              = 20
+    "dev_things"              = 5
+  }
+}
+
 # -----------------------------------------------
 # Common Consumer Variables
 # -----------------------------------------------

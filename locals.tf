@@ -13,4 +13,25 @@ locals {
   common_consumer_identifier = format("%s-common", local.stack_identifier)
   events_consumer_identifier = format("%s-events", local.stack_identifier)
   sms_consumer_identifier    = format("%s-sms", local.stack_identifier)
+  
+  common_consumer_group_metric_identifiers = flatten([
+    for topic in var.common_consumer_kafka_topics : [
+      for partition in range(var.all_topic_partition_count[topic]) : 
+        format("topic.%s.%s.partition%s", local.common_consumer_identifier, topic, partition)
+    ]
+  ])
+
+  events_consumer_group_metric_identifiers = flatten([
+    for topic in var.events_consumer_kafka_topics : [
+      for partition in range(var.all_topic_partition_count[topic]) : 
+        format("topic.%s.%s.partition%s", local.events_consumer_identifier, topic, partition)
+    ]
+  ])
+
+  sms_consumer_group_metric_identifiers = flatten([
+    for topic in var.sms_consumer_kafka_topics : [
+      for partition in range(var.all_topic_partition_count[topic]) : 
+        format("topic.%s.%s.partition%s", local.sms_consumer_identifier, topic, partition)
+    ]
+  ])
 }
