@@ -175,6 +175,18 @@ variable "all_topic_partition_count" {
   }
 }
 
+variable "lag_threshold" {
+  type        = number
+  description = "lag threshold for kafka topics"
+  default     = 100
+}
+
+variable "enable_lag_monitoring" {
+  type        = bool
+  description = "enable lag monitoring"
+  default     = false
+}
+
 # -----------------------------------------------
 # Common Consumer Variables
 # -----------------------------------------------
@@ -366,6 +378,12 @@ variable "kafka_broker_hosts" {
   type        = list(string)
   description = "kafka broker hosts"
   default     = []
+}
+
+variable "kafka_host_identifier" {
+  type        = string
+  description = "kafka host identifier"
+  default     = null
 }
 
 variable "postgres_user_name" {

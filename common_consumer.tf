@@ -328,3 +328,30 @@ resource "aws_cloudwatch_metric_alarm" "common_consumer_asg_disk" {
     aws_sns_topic.alert_topic.arn
   ]
 }
+
+resource "aws_cloudwatch_metric_alarm" "common_topic_lag" {
+  count = var.enable_lag_monitoring ? length(local.common_consumer_group_metric_identifiers) : 0
+
+  alarm_name          = format("%s-%s-lag-warning", var.environment, local.common_consumer_group_metric_identifiers[count.index])
+  alarm_description   = format("This metric alarm keeps a watch on lag for kafka topic (%s)", local.common_consumer_group_metric_identifiers[count.index])
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = format("%s_lag", local.common_consumer_group_metric_identifiers[count.index])
+  namespace           = "CWAgent"
+  period              = 60
+  statistic           = "Average"
+  threshold           = var.lag_threshold
+
+  dimensions = {
+    InstanceId = var.kafka_host_identifier
+  }
+
+  alarm_actions = [
+    aws_sns_topic.alert_topic.arn,
+    aws_autoscaling_policy.common_consumer_upscale.arn
+  ]
+
+  ok_actions = [
+    aws_sns_topic.alert_topic.arn
+  ]
+}
