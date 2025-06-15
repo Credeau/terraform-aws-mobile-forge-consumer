@@ -215,9 +215,7 @@ variable "common_consumer_kafka_topics" {
     "apps_and_device_batched",
     "contacts_batched",
     "call_logs_batched",
-    "web_batched",
-    "sms_batched",
-    "events_log"
+    "web_batched"
   ]
 }
 
