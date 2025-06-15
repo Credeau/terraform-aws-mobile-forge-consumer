@@ -14,6 +14,8 @@ locals {
   events_consumer_identifier = format("%s-events", local.stack_identifier)
   sms_consumer_identifier    = format("%s-sms", local.stack_identifier)
   
+  # Create a list of metric identifiers for each partition of each topic for each consumer group
+  # in the format exported by Kafka module.
   common_consumer_group_metric_identifiers = flatten([
     for topic in var.common_consumer_kafka_topics : [
       for partition in range(var.all_topic_partition_count[topic]) : 
