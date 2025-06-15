@@ -416,7 +416,7 @@ variable "mongo_db" {
 }
 
 variable "mongo_enabled_sources" {
-  type        = string
+  type        = list(string)
   description = "mongo enabled sources"
   default     = ["*"]
 }
