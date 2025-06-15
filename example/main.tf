@@ -29,7 +29,7 @@ module "consumer" {
   organization           = "credeau"
   alert_email_recipients = []
 
-  ecr_repository              = "device-insights-consumer"
+  ecr_repository              = "mobile-forge-consumer"
   ecr_image_tag               = "0.7.2"
   root_volume_size            = 20
   ami_id                      = "ami-00000000000000000"
@@ -47,6 +47,15 @@ module "consumer" {
   upscale_schedule            = "0 8 * * MON-SUN"
   downscale_schedule          = "0 21 * * MON-SUN"
 
+  all_topic_partition_count = {
+    "sms_batched"             = 20
+    "apps_and_device_batched" = 10
+    "contacts_batched"        = 5
+    "call_logs_batched"       = 5
+    "events_log"              = 20
+    "dev_things"              = 5
+  }
+
   common_consumer_instance_type                  = "t3a.medium"
   common_consumer_asg_min_size                   = 2
   common_consumer_asg_max_size                   = 5
@@ -57,8 +66,7 @@ module "consumer" {
   common_consumer_kafka_topics = [
     "apps_and_device_batched",
     "contacts_batched",
-    "call_logs_batched",
-    "web_batched"
+    "call_logs_batched"
   ]
 
   events_consumer_instance_type                  = "t3a.medium"
@@ -69,7 +77,7 @@ module "consumer" {
   scheduled_upscale_events_consumer_max_size     = 20
   scheduled_upscale_events_consumer_desired_size = 5
   events_consumer_kafka_topics = [
-    "events_batched"
+    "events_log"
   ]
 
   sms_consumer_instance_type                  = "t3a.medium"
