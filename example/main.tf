@@ -98,6 +98,8 @@ module "consumer" {
   ]
   internal_security_groups = ["sg-00000000000000000"]
   kafka_broker_hosts       = [format("%s:9092", module.kafka.host_address)]
+  kafka_host_identifier    = module.kafka.instance_id
+  enable_lag_monitoring    = true
   postgres_user_name       = data.aws_ssm_parameter.postgres_user_name.value
   postgres_password        = data.aws_ssm_parameter.postgres_password.value
   postgres_host            = aws_db_instance.postgres.address
@@ -109,4 +111,8 @@ module "consumer" {
   mongo_port               = 27017
   mongo_db                 = "sync_db"
   mongo_enabled_sources    = ["*"]
+}
+
+output "consumer" {
+  value = module.consumer
 }
