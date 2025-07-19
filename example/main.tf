@@ -19,7 +19,7 @@ data "aws_ssm_parameter" "postgres_password" {
 }
 
 module "consumer" {
-  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-consumer.git?ref=v1.0.0"
+  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-consumer.git?ref=v1.0.1"
 
   application            = "di-consumer"
   environment            = "prod"
