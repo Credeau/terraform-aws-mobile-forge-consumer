@@ -310,17 +310,17 @@ resource "aws_cloudwatch_metric_alarm" "sms_consumer_asg_memory_downscale" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sms_topic_lag" {
-  count = var.enable_lag_monitoring ? length(local.sms_consumer_group_metric_identifiers) : 0
+  count = var.enable_lag_monitoring ? length(local.kafka_topic_lag_alert_ladder) : 0
 
-  alarm_name          = format("%s-%s-lag-warning", var.environment, local.sms_consumer_group_metric_identifiers[count.index])
-  alarm_description   = format("This metric alarm keeps a watch on lag for kafka topic (%s)", local.sms_consumer_group_metric_identifiers[count.index])
+  alarm_name          = format("%s-sms_batched-lag-warning-%s", local.sms_consumer_identifier, local.kafka_topic_lag_alert_ladder[count.index])
+  alarm_description   = format("This metric alarm keeps a watch on lag of kafka topic sms_batched for threshold %s", local.kafka_topic_lag_alert_ladder[count.index])
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
-  metric_name         = format("%s_lag", local.sms_consumer_group_metric_identifiers[count.index])
+  metric_name         = format("topic_%s_sms_batched_lag", local.sms_consumer_identifier)
   namespace           = "CWAgent"
   period              = 60
   statistic           = "Average"
-  threshold           = var.lag_threshold
+  threshold           = local.kafka_topic_lag_alert_ladder[count.index]
 
   dimensions = {
     InstanceId = var.kafka_host_identifier

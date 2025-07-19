@@ -329,17 +329,17 @@ resource "aws_cloudwatch_metric_alarm" "events_consumer_asg_disk" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "events_topic_lag" {
-  count = var.enable_lag_monitoring ? length(local.events_consumer_group_metric_identifiers) : 0
+  count = var.enable_lag_monitoring ? length(local.kafka_topic_lag_alert_ladder) : 0
 
-  alarm_name          = format("%s-%s-lag-warning", var.environment, local.events_consumer_group_metric_identifiers[count.index])
-  alarm_description   = format("This metric alarm keeps a watch on lag for kafka topic (%s)", local.events_consumer_group_metric_identifiers[count.index])
+  alarm_name          = format("%s-events_log-lag-warning-%s", local.events_consumer_identifier, local.kafka_topic_lag_alert_ladder[count.index])
+  alarm_description   = format("This metric alarm keeps a watch on lag of kafka topic events_log for threshold %s", local.kafka_topic_lag_alert_ladder[count.index])
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
-  metric_name         = format("%s_lag", local.events_consumer_group_metric_identifiers[count.index])
+  metric_name         = format("topic_%s_events_log_lag", local.events_consumer_identifier)
   namespace           = "CWAgent"
   period              = 60
   statistic           = "Average"
-  threshold           = var.lag_threshold
+  threshold           = local.kafka_topic_lag_alert_ladder[count.index]
 
   dimensions = {
     InstanceId = var.kafka_host_identifier
