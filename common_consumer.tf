@@ -58,7 +58,7 @@ resource "aws_autoscaling_group" "common_consumer" {
 }
 
 resource "aws_autoscaling_schedule" "common_consumer_scheduled_scaling" {
-  count = var.enable_scheduled_scaling ? 1 : length(var.common_consumer_scaling_schedules)
+  count = var.enable_scheduled_scaling ? length(var.common_consumer_scaling_schedules) : 0
 
   scheduled_action_name  = format("%s-scheduled-scaling-action-%s", local.common_consumer_identifier, count.index)
   autoscaling_group_name = aws_autoscaling_group.common_consumer.name

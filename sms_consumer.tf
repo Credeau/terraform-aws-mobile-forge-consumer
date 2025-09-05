@@ -58,10 +58,10 @@ resource "aws_autoscaling_group" "sms_consumer" {
 }
 
 resource "aws_autoscaling_schedule" "sms_consumer_scheduled_scaling" {
-  count = var.enable_scheduled_scaling ? 1 : length(var.sms_consumer_scaling_schedules)
+  count = var.enable_scheduled_scaling ? length(var.sms_consumer_scaling_schedules) : 0
 
   scheduled_action_name  = format("%s-scheduled-scaling-action-%s", local.sms_consumer_identifier, count.index)
-  autoscaling_group_name = aws_autoscaling_group.events_consumer.name
+  autoscaling_group_name = aws_autoscaling_group.sms_consumer.name
 
   min_size         = var.sms_consumer_scaling_schedules[count.index].min_size
   max_size         = var.sms_consumer_scaling_schedules[count.index].max_size
