@@ -150,18 +150,6 @@ variable "enable_scheduled_scaling" {
   default     = false
 }
 
-variable "upscale_schedule" {
-  type        = string
-  description = "upscale schedule"
-  default     = "0 8 * * MON-SUN"
-}
-
-variable "downscale_schedule" {
-  type        = string
-  description = "downscale schedule"
-  default     = "0 21 * * MON-SUN"
-}
-
 variable "all_topic_partition_count" {
   type        = map(number)
   description = "number of partitions for all topics"
@@ -214,24 +202,6 @@ variable "common_consumer_asg_desired_size" {
   default     = 2
 }
 
-variable "scheduled_upscale_common_consumer_min_size" {
-  type        = number
-  description = "minimum number of instances to keep in common consumer asg for scheduled upscale"
-  default     = 5
-}
-
-variable "scheduled_upscale_common_consumer_max_size" {
-  type        = number
-  description = "maximum number of instances to keep in common consumer asg for scheduled upscale"
-  default     = 5
-}
-
-variable "scheduled_upscale_common_consumer_desired_size" {
-  type        = number
-  description = "desired number of instances to keep in common consumer asg for scheduled upscale"
-  default     = 5
-}
-
 variable "common_consumer_kafka_topics" {
   type        = list(string)
   description = "kafka topics for common consumer"
@@ -240,6 +210,30 @@ variable "common_consumer_kafka_topics" {
     "apps_and_device_batched",
     "contacts_batched",
     "call_logs_batched"
+  ]
+}
+
+variable "common_consumer_scaling_schedules" {
+  type = list(object({
+    cron_expression  = string
+    min_size         = number
+    max_size         = number
+    desired_capacity = number
+  }))
+  description = "scaling schedules for common consumer"
+  default = [
+    {
+      cron_expression  = "0 8 * * MON-SUN"
+      min_size         = 5
+      max_size         = 10
+      desired_capacity = 5
+    },
+    {
+      cron_expression  = "0 21 * * MON-SUN"
+      min_size         = 2
+      max_size         = 10
+      desired_capacity = 2
+    }
   ]
 }
 
@@ -270,29 +264,35 @@ variable "events_consumer_asg_desired_size" {
   default     = 2
 }
 
-variable "scheduled_upscale_events_consumer_min_size" {
-  type        = number
-  description = "minimum number of instances to keep in events consumer asg for scheduled upscale"
-  default     = 5
-}
-
-variable "scheduled_upscale_events_consumer_max_size" {
-  type        = number
-  description = "maximum number of instances to keep in events consumer asg for scheduled upscale"
-  default     = 10
-}
-
-variable "scheduled_upscale_events_consumer_desired_size" {
-  type        = number
-  description = "desired number of instances to keep in events consumer asg for scheduled upscale"
-  default     = 5
-}
-
 variable "events_consumer_kafka_topics" {
   type        = list(string)
   description = "kafka topics for events consumer"
   default = [
     "events_log"
+  ]
+}
+
+variable "events_consumer_scaling_schedules" {
+  type = list(object({
+    cron_expression  = string
+    min_size         = number
+    max_size         = number
+    desired_capacity = number
+  }))
+  description = "scaling schedules for events consumer"
+  default = [
+    {
+      cron_expression  = "0 8 * * MON-SUN"
+      min_size         = 5
+      max_size         = 10
+      desired_capacity = 5
+    },
+    {
+      cron_expression  = "0 21 * * MON-SUN"
+      min_size         = 2
+      max_size         = 10
+      desired_capacity = 2
+    }
   ]
 }
 
@@ -323,29 +323,35 @@ variable "sms_consumer_asg_desired_size" {
   default     = 2
 }
 
-variable "scheduled_upscale_sms_consumer_min_size" {
-  type        = number
-  description = "minimum number of instances to keep in sms consumer asg for scheduled upscale"
-  default     = 5
-}
-
-variable "scheduled_upscale_sms_consumer_max_size" {
-  type        = number
-  description = "maximum number of instances to keep in sms consumer asg for scheduled upscale"
-  default     = 10
-}
-
-variable "scheduled_upscale_sms_consumer_desired_size" {
-  type        = number
-  description = "desired number of instances to keep in sms consumer asg for scheduled upscale"
-  default     = 5
-}
-
 variable "sms_consumer_kafka_topics" {
   type        = list(string)
   description = "kafka topics for sms consumer"
   default = [
     "sms_batched"
+  ]
+}
+
+variable "sms_consumer_scaling_schedules" {
+  type = list(object({
+    cron_expression  = string
+    min_size         = number
+    max_size         = number
+    desired_capacity = number
+  }))
+  description = "scaling schedules for sms consumer"
+  default = [
+    {
+      cron_expression  = "0 8 * * MON-SUN"
+      min_size         = 5
+      max_size         = 10
+      desired_capacity = 5
+    },
+    {
+      cron_expression  = "0 21 * * MON-SUN"
+      min_size         = 2
+      max_size         = 10
+      desired_capacity = 2
+    }
   ]
 }
 

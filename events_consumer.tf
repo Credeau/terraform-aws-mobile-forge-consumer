@@ -57,28 +57,17 @@ resource "aws_autoscaling_group" "events_consumer" {
   }
 }
 
-resource "aws_autoscaling_schedule" "events_consumer_scheduled_upscale" {
-  count = var.enable_scheduled_scaling ? 1 : 0
+resource "aws_autoscaling_schedule" "events_consumer_scheduled_scaling" {
+  count = var.enable_scheduled_scaling ? 1 : length(var.sms_consumer_scaling_schedules)
 
-  scheduled_action_name  = format("%s-scheduled-upscale-action", local.events_consumer_identifier)
-  min_size               = var.scheduled_upscale_events_consumer_min_size
-  max_size               = var.scheduled_upscale_events_consumer_max_size
-  desired_capacity       = var.scheduled_upscale_events_consumer_desired_size
+  scheduled_action_name  = format("%s-scheduled-scaling-action-%s", local.events_consumer_identifier, count.index)
   autoscaling_group_name = aws_autoscaling_group.events_consumer.name
-  time_zone              = var.timezone
-  recurrence             = var.upscale_schedule
-}
 
-resource "aws_autoscaling_schedule" "events_consumer_scheduled_downscale" {
-  count = var.enable_scheduled_scaling ? 1 : 0
-
-  scheduled_action_name  = format("%s-scheduled-downscale-action", local.events_consumer_identifier)
-  min_size               = var.events_consumer_asg_min_size
-  max_size               = var.events_consumer_asg_max_size
-  desired_capacity       = var.events_consumer_asg_desired_size
-  autoscaling_group_name = aws_autoscaling_group.events_consumer.name
-  time_zone              = var.timezone
-  recurrence             = var.downscale_schedule
+  min_size         = var.events_consumer_scaling_schedules[count.index].min_size
+  max_size         = var.events_consumer_scaling_schedules[count.index].max_size
+  desired_capacity = var.events_consumer_scaling_schedules[count.index].desired_capacity
+  time_zone        = "Asia/Kolkata"
+  recurrence       = var.events_consumer_scaling_schedules[count.index].cron_expression
 }
 
 resource "aws_autoscaling_policy" "events_consumer_upscale" {
