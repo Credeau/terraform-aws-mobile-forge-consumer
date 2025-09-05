@@ -19,7 +19,7 @@ data "aws_ssm_parameter" "postgres_password" {
 }
 
 module "consumer" {
-  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-consumer.git?ref=v1.0.1"
+  source = "git::https://github.com/credeau/terraform-aws-mobile-forge-consumer.git?ref=v1.0.2"
 
   application            = "di-consumer"
   environment            = "prod"
@@ -56,37 +56,70 @@ module "consumer" {
     "dev_things"              = 5
   }
 
-  common_consumer_instance_type                  = "t3a.medium"
-  common_consumer_asg_min_size                   = 2
-  common_consumer_asg_max_size                   = 5
-  common_consumer_asg_desired_size               = 2
-  scheduled_upscale_common_consumer_min_size     = 5
-  scheduled_upscale_common_consumer_max_size     = 10
-  scheduled_upscale_common_consumer_desired_size = 5
+  common_consumer_instance_type     = "t3a.medium"
+  common_consumer_asg_min_size      = 2
+  common_consumer_asg_max_size      = 5
+  common_consumer_asg_desired_size  = 2
+  common_consumer_scaling_schedules = [
+    {
+      cron_expression  = "0 8 * * MON-SUN"
+      min_size         = 5
+      max_size         = 5
+      desired_capacity = 5
+    },
+    {
+      cron_expression  = "0 21 * * MON-SUN"
+      min_size         = 2
+      max_size         = 5
+      desired_capacity = 2
+    }
+  ]
   common_consumer_kafka_topics = [
     "apps_and_device_batched",
     "contacts_batched",
     "call_logs_batched"
   ]
 
-  events_consumer_instance_type                  = "t3a.medium"
-  events_consumer_asg_min_size                   = 2
-  events_consumer_asg_max_size                   = 10
-  events_consumer_asg_desired_size               = 2
-  scheduled_upscale_events_consumer_min_size     = 5
-  scheduled_upscale_events_consumer_max_size     = 20
-  scheduled_upscale_events_consumer_desired_size = 5
+  events_consumer_instance_type     = "t3a.medium"
+  events_consumer_asg_min_size      = 2
+  events_consumer_asg_max_size      = 10
+  events_consumer_asg_desired_size  = 2
+  events_consumer_scaling_schedules = [
+    {
+      cron_expression  = "0 8 * * MON-SUN"
+      min_size         = 5
+      max_size         = 10
+      desired_capacity = 5
+    },
+    {
+      cron_expression  = "0 21 * * MON-SUN"
+      min_size         = 2
+      max_size         = 10
+      desired_capacity = 2
+    }
+  ]
   events_consumer_kafka_topics = [
     "events_log"
   ]
 
-  sms_consumer_instance_type                  = "t3a.medium"
-  sms_consumer_asg_min_size                   = 2
-  sms_consumer_asg_max_size                   = 10
-  sms_consumer_asg_desired_size               = 2
-  scheduled_upscale_sms_consumer_min_size     = 5
-  scheduled_upscale_sms_consumer_max_size     = 20
-  scheduled_upscale_sms_consumer_desired_size = 5
+  sms_consumer_instance_type     = "t3a.medium"
+  sms_consumer_asg_min_size      = 2
+  sms_consumer_asg_max_size      = 10
+  sms_consumer_asg_desired_size  = 2
+  sms_consumer_scaling_schedules = [
+    {
+      cron_expression  = "0 8 * * MON-SUN"
+      min_size         = 5
+      max_size         = 10
+      desired_capacity = 5
+    },
+    {
+      cron_expression  = "0 21 * * MON-SUN"
+      min_size         = 2
+      max_size         = 10
+      desired_capacity = 2
+    }
+  ]
   sms_consumer_kafka_topics = [
     "sms_batched"
   ]
