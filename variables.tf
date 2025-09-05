@@ -153,7 +153,7 @@ variable "enable_scheduled_scaling" {
 variable "all_topic_partition_count" {
   type        = map(number)
   description = "number of partitions for all topics"
-  default     = {
+  default = {
     "sms_batched"             = 20
     "apps_and_device_batched" = 10
     "contacts_batched"        = 5

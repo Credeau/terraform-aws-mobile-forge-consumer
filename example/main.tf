@@ -56,10 +56,10 @@ module "consumer" {
     "dev_things"              = 5
   }
 
-  common_consumer_instance_type     = "t3a.medium"
-  common_consumer_asg_min_size      = 2
-  common_consumer_asg_max_size      = 5
-  common_consumer_asg_desired_size  = 2
+  common_consumer_instance_type    = "t3a.medium"
+  common_consumer_asg_min_size     = 2
+  common_consumer_asg_max_size     = 5
+  common_consumer_asg_desired_size = 2
   common_consumer_scaling_schedules = [
     {
       cron_expression  = "0 8 * * MON-SUN"
@@ -80,10 +80,10 @@ module "consumer" {
     "call_logs_batched"
   ]
 
-  events_consumer_instance_type     = "t3a.medium"
-  events_consumer_asg_min_size      = 2
-  events_consumer_asg_max_size      = 10
-  events_consumer_asg_desired_size  = 2
+  events_consumer_instance_type    = "t3a.medium"
+  events_consumer_asg_min_size     = 2
+  events_consumer_asg_max_size     = 10
+  events_consumer_asg_desired_size = 2
   events_consumer_scaling_schedules = [
     {
       cron_expression  = "0 8 * * MON-SUN"
@@ -102,10 +102,10 @@ module "consumer" {
     "events_log"
   ]
 
-  sms_consumer_instance_type     = "t3a.medium"
-  sms_consumer_asg_min_size      = 2
-  sms_consumer_asg_max_size      = 10
-  sms_consumer_asg_desired_size  = 2
+  sms_consumer_instance_type    = "t3a.medium"
+  sms_consumer_asg_min_size     = 2
+  sms_consumer_asg_max_size     = 10
+  sms_consumer_asg_desired_size = 2
   sms_consumer_scaling_schedules = [
     {
       cron_expression  = "0 8 * * MON-SUN"
