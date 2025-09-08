@@ -31,21 +31,20 @@ No modules.
 | [aws_autoscaling_policy.events_consumer_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_autoscaling_policy.sms_consumer_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_autoscaling_policy.sms_consumer_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
-| [aws_autoscaling_schedule.common_consumer_scheduled_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
-| [aws_autoscaling_schedule.common_consumer_scheduled_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
-| [aws_autoscaling_schedule.events_consumer_scheduled_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
-| [aws_autoscaling_schedule.events_consumer_scheduled_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
-| [aws_autoscaling_schedule.sms_consumer_scheduled_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
-| [aws_autoscaling_schedule.sms_consumer_scheduled_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
+| [aws_autoscaling_schedule.common_consumer_scheduled_scaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
+| [aws_autoscaling_schedule.events_consumer_scheduled_scaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
+| [aws_autoscaling_schedule.sms_consumer_scheduled_scaling](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule) | resource |
 | [aws_cloudwatch_log_group.common_consumer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.events_consumer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.sms_consumer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_metric_alarm.apps_and_device_topic_lag](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.call_logs_topic_lag](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.common_consumer_asg_cpu_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.common_consumer_asg_disk](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.common_consumer_asg_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.common_consumer_asg_memory_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.common_consumer_asg_memory_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
-| [aws_cloudwatch_metric_alarm.common_topic_lag](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.contacts_topic_lag](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.events_consumer_asg_cpu_downscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.events_consumer_asg_cpu_upscale](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_cloudwatch_metric_alarm.events_consumer_asg_disk](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
@@ -88,8 +87,8 @@ No modules.
 | <a name="input_common_consumer_asg_min_size"></a> [common\_consumer\_asg\_min\_size](#input\_common\_consumer\_asg\_min\_size) | minimum number of instances to keep in asg for common consumer | `number` | `2` | no |
 | <a name="input_common_consumer_instance_type"></a> [common\_consumer\_instance\_type](#input\_common\_consumer\_instance\_type) | Instances type to provision in ASG for common consumer | `string` | `"t2.micro"` | no |
 | <a name="input_common_consumer_kafka_topics"></a> [common\_consumer\_kafka\_topics](#input\_common\_consumer\_kafka\_topics) | kafka topics for common consumer | `list(string)` | <pre>[<br>  "dev_things",<br>  "apps_and_device_batched",<br>  "contacts_batched",<br>  "call_logs_batched"<br>]</pre> | no |
+| <a name="input_common_consumer_scaling_schedules"></a> [common\_consumer\_scaling\_schedules](#input\_common\_consumer\_scaling\_schedules) | scaling schedules for common consumer | <pre>list(object({<br>    cron_expression  = string<br>    min_size         = number<br>    max_size         = number<br>    desired_capacity = number<br>  }))</pre> | <pre>[<br>  {<br>    "cron_expression": "0 8 * * MON-SUN",<br>    "desired_capacity": 5,<br>    "max_size": 10,<br>    "min_size": 5<br>  },<br>  {<br>    "cron_expression": "0 21 * * MON-SUN",<br>    "desired_capacity": 2,<br>    "max_size": 10,<br>    "min_size": 2<br>  }<br>]</pre> | no |
 | <a name="input_downscale_evaluation_period"></a> [downscale\_evaluation\_period](#input\_downscale\_evaluation\_period) | Number of seconds required to observe the system before triggering downscale | `number` | `300` | no |
-| <a name="input_downscale_schedule"></a> [downscale\_schedule](#input\_downscale\_schedule) | downscale schedule | `string` | `"0 21 * * MON-SUN"` | no |
 | <a name="input_ecr_image_tag"></a> [ecr\_image\_tag](#input\_ecr\_image\_tag) | aws sync ecr repository image tag | `string` | `"latest"` | no |
 | <a name="input_ecr_repository"></a> [ecr\_repository](#input\_ecr\_repository) | aws sync ecr repository | `string` | `"device-insights-consumer"` | no |
 | <a name="input_enable_lag_monitoring"></a> [enable\_lag\_monitoring](#input\_enable\_lag\_monitoring) | enable lag monitoring | `bool` | `false` | no |
@@ -100,6 +99,7 @@ No modules.
 | <a name="input_events_consumer_asg_min_size"></a> [events\_consumer\_asg\_min\_size](#input\_events\_consumer\_asg\_min\_size) | minimum number of instances to keep in asg for events consumer | `number` | `2` | no |
 | <a name="input_events_consumer_instance_type"></a> [events\_consumer\_instance\_type](#input\_events\_consumer\_instance\_type) | Instances type to provision in ASG for events consumer | `string` | `"t2.micro"` | no |
 | <a name="input_events_consumer_kafka_topics"></a> [events\_consumer\_kafka\_topics](#input\_events\_consumer\_kafka\_topics) | kafka topics for events consumer | `list(string)` | <pre>[<br>  "events_log"<br>]</pre> | no |
+| <a name="input_events_consumer_scaling_schedules"></a> [events\_consumer\_scaling\_schedules](#input\_events\_consumer\_scaling\_schedules) | scaling schedules for events consumer | <pre>list(object({<br>    cron_expression  = string<br>    min_size         = number<br>    max_size         = number<br>    desired_capacity = number<br>  }))</pre> | <pre>[<br>  {<br>    "cron_expression": "0 8 * * MON-SUN",<br>    "desired_capacity": 5,<br>    "max_size": 10,<br>    "min_size": 5<br>  },<br>  {<br>    "cron_expression": "0 21 * * MON-SUN",<br>    "desired_capacity": 2,<br>    "max_size": 10,<br>    "min_size": 2<br>  }<br>]</pre> | no |
 | <a name="input_internal_security_groups"></a> [internal\_security\_groups](#input\_internal\_security\_groups) | list of internal access security group ids | `list(string)` | `[]` | no |
 | <a name="input_kafka_broker_hosts"></a> [kafka\_broker\_hosts](#input\_kafka\_broker\_hosts) | kafka broker hosts | `list(string)` | `[]` | no |
 | <a name="input_kafka_host_identifier"></a> [kafka\_host\_identifier](#input\_kafka\_host\_identifier) | kafka host identifier | `string` | `null` | no |
@@ -132,25 +132,16 @@ No modules.
 | <a name="input_scaling_cpu_threshold"></a> [scaling\_cpu\_threshold](#input\_scaling\_cpu\_threshold) | CPU utilization % threshold for scaling & alerting | `number` | `65` | no |
 | <a name="input_scaling_disk_threshold"></a> [scaling\_disk\_threshold](#input\_scaling\_disk\_threshold) | Disk utilization % threshold for scaling & alerting | `number` | `80` | no |
 | <a name="input_scaling_memory_threshold"></a> [scaling\_memory\_threshold](#input\_scaling\_memory\_threshold) | Memory utilization % threshold for scaling & alerting | `number` | `60` | no |
-| <a name="input_scheduled_upscale_common_consumer_desired_size"></a> [scheduled\_upscale\_common\_consumer\_desired\_size](#input\_scheduled\_upscale\_common\_consumer\_desired\_size) | desired number of instances to keep in common consumer asg for scheduled upscale | `number` | `5` | no |
-| <a name="input_scheduled_upscale_common_consumer_max_size"></a> [scheduled\_upscale\_common\_consumer\_max\_size](#input\_scheduled\_upscale\_common\_consumer\_max\_size) | maximum number of instances to keep in common consumer asg for scheduled upscale | `number` | `5` | no |
-| <a name="input_scheduled_upscale_common_consumer_min_size"></a> [scheduled\_upscale\_common\_consumer\_min\_size](#input\_scheduled\_upscale\_common\_consumer\_min\_size) | minimum number of instances to keep in common consumer asg for scheduled upscale | `number` | `5` | no |
-| <a name="input_scheduled_upscale_events_consumer_desired_size"></a> [scheduled\_upscale\_events\_consumer\_desired\_size](#input\_scheduled\_upscale\_events\_consumer\_desired\_size) | desired number of instances to keep in events consumer asg for scheduled upscale | `number` | `5` | no |
-| <a name="input_scheduled_upscale_events_consumer_max_size"></a> [scheduled\_upscale\_events\_consumer\_max\_size](#input\_scheduled\_upscale\_events\_consumer\_max\_size) | maximum number of instances to keep in events consumer asg for scheduled upscale | `number` | `10` | no |
-| <a name="input_scheduled_upscale_events_consumer_min_size"></a> [scheduled\_upscale\_events\_consumer\_min\_size](#input\_scheduled\_upscale\_events\_consumer\_min\_size) | minimum number of instances to keep in events consumer asg for scheduled upscale | `number` | `5` | no |
-| <a name="input_scheduled_upscale_sms_consumer_desired_size"></a> [scheduled\_upscale\_sms\_consumer\_desired\_size](#input\_scheduled\_upscale\_sms\_consumer\_desired\_size) | desired number of instances to keep in sms consumer asg for scheduled upscale | `number` | `5` | no |
-| <a name="input_scheduled_upscale_sms_consumer_max_size"></a> [scheduled\_upscale\_sms\_consumer\_max\_size](#input\_scheduled\_upscale\_sms\_consumer\_max\_size) | maximum number of instances to keep in sms consumer asg for scheduled upscale | `number` | `10` | no |
-| <a name="input_scheduled_upscale_sms_consumer_min_size"></a> [scheduled\_upscale\_sms\_consumer\_min\_size](#input\_scheduled\_upscale\_sms\_consumer\_min\_size) | minimum number of instances to keep in sms consumer asg for scheduled upscale | `number` | `5` | no |
 | <a name="input_sms_consumer_asg_desired_size"></a> [sms\_consumer\_asg\_desired\_size](#input\_sms\_consumer\_asg\_desired\_size) | number of instances to provision for sms consumer | `number` | `2` | no |
 | <a name="input_sms_consumer_asg_max_size"></a> [sms\_consumer\_asg\_max\_size](#input\_sms\_consumer\_asg\_max\_size) | maximum number of instances to keep in asg for sms consumer | `number` | `5` | no |
 | <a name="input_sms_consumer_asg_min_size"></a> [sms\_consumer\_asg\_min\_size](#input\_sms\_consumer\_asg\_min\_size) | minimum number of instances to keep in asg for sms consumer | `number` | `2` | no |
 | <a name="input_sms_consumer_instance_type"></a> [sms\_consumer\_instance\_type](#input\_sms\_consumer\_instance\_type) | Instances type to provision in ASG for sms consumer | `string` | `"t2.micro"` | no |
 | <a name="input_sms_consumer_kafka_topics"></a> [sms\_consumer\_kafka\_topics](#input\_sms\_consumer\_kafka\_topics) | kafka topics for sms consumer | `list(string)` | <pre>[<br>  "sms_batched"<br>]</pre> | no |
+| <a name="input_sms_consumer_scaling_schedules"></a> [sms\_consumer\_scaling\_schedules](#input\_sms\_consumer\_scaling\_schedules) | scaling schedules for sms consumer | <pre>list(object({<br>    cron_expression  = string<br>    min_size         = number<br>    max_size         = number<br>    desired_capacity = number<br>  }))</pre> | <pre>[<br>  {<br>    "cron_expression": "0 8 * * MON-SUN",<br>    "desired_capacity": 5,<br>    "max_size": 10,<br>    "min_size": 5<br>  },<br>  {<br>    "cron_expression": "0 21 * * MON-SUN",<br>    "desired_capacity": 2,<br>    "max_size": 10,<br>    "min_size": 2<br>  }<br>]</pre> | no |
 | <a name="input_stack_owner"></a> [stack\_owner](#input\_stack\_owner) | owner of the stack | `string` | `"tech@credeau.com"` | no |
 | <a name="input_stack_team"></a> [stack\_team](#input\_stack\_team) | team of the stack | `string` | `"devops"` | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | timezone to use for scheduled scaling | `string` | `"Asia/Kolkata"` | no |
 | <a name="input_upscale_evaluation_period"></a> [upscale\_evaluation\_period](#input\_upscale\_evaluation\_period) | Number of seconds required to observe the system before triggering upscale | `number` | `60` | no |
-| <a name="input_upscale_schedule"></a> [upscale\_schedule](#input\_upscale\_schedule) | upscale schedule | `string` | `"0 8 * * MON-SUN"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | vpc id | `string` | n/a | yes |
 
 ## Outputs
