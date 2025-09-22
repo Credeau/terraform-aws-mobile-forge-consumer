@@ -175,6 +175,20 @@ variable "enable_lag_monitoring" {
   default     = false
 }
 
+variable "log_metric_filters" {
+  type = list(object({
+    name           = string
+    filter_pattern = string
+  }))
+  description = "list of log metric filters"
+  default = [
+    {
+      name           = "log_errors"
+      filter_pattern = "ERROR"
+    }
+  ]
+}
+
 # -----------------------------------------------
 # Common Consumer Variables
 # -----------------------------------------------
