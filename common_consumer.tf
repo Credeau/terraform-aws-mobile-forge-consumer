@@ -398,3 +398,21 @@ resource "aws_cloudwatch_metric_alarm" "call_logs_topic_lag" {
     aws_sns_topic.alert_topic.arn
   ]
 }
+
+resource "aws_cloudwatch_metric_alarm" "common_consumer_log_errors" {
+  count = length(var.log_metric_filters)
+
+  alarm_name          = format("%s-%s", local.common_consumer_identifier, var.log_metric_filters[count.index].name)
+  namespace           = local.common_consumer_identifier
+  metric_name         = var.log_metric_filters[count.index].name
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 1
+  threshold           = 1
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [
+    aws_sns_topic.alert_topic.arn
+  ]
+}
